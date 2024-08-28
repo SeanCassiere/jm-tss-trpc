@@ -30,18 +30,21 @@ const getTRPCClientOptions = createServerFn("GET", async () => {
   const session = await getSessionData();
   // const url = `${process.env.API_URL}/trpc`;
   const url = `http://localhost:3030/trpc`;
-  return {
-    clientHeaders: {
-      "x-root-key": session.rootKey,
+  return [
+    "user-id-foo",
+    {
+      clientHeaders: {
+        "x-root-key": session.rootKey,
+      },
+      clientUrl: url,
     },
-    clientUrl: url,
-  };
+  ] as const;
 });
 
-const getCurrentUser = createServerFn("GET", async () => {
-  const session = await getSessionData();
-  return session.userId;
-});
+// const getCurrentUser = createServerFn("GET", async () => {
+//   const session = await getSessionData();
+//   return session.userId;
+// });
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -56,10 +59,7 @@ export const Route = createRootRouteWithContext<{
     { rel: "stylesheet", href: appCss },
   ],
   beforeLoad: async () => {
-    const [userId, trpcClientOptions] = await Promise.all([
-      getCurrentUser(),
-      getTRPCClientOptions(),
-    ]);
+    const [userId, trpcClientOptions] = await getTRPCClientOptions();
 
     const trpc = createServerSideHelpers({
       client: createAuthenticatedTRPCClient(
@@ -101,7 +101,7 @@ function TRPCProvider(
 
   console.log("rendering outer trpc provider");
   return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+    <trpc.Provider key="bar" client={trpcClient} queryClient={queryClient}>
       {props.children}
     </trpc.Provider>
   );

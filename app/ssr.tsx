@@ -17,10 +17,10 @@ export default eventHandler(async (event) => {
   /**
    * TODO: Set from reverse proxy
    */
-  await updateSession(event, sessionConfig, {
-    userId: "user_123",
-    rootKey: process.env.INTERNAL_ENDPOINTS_ROOT_SECRET ?? "",
-  });
+  // await updateSession(event, sessionConfig, {
+  //   userId: "user_123",
+  //   rootKey: process.env.INTERNAL_ENDPOINTS_ROOT_SECRET ?? "",
+  // });
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return tsrHandler(event);

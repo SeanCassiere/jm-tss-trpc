@@ -13,6 +13,7 @@ export const sessionConfig = {
 } satisfies SessionConfig;
 
 export const getSessionData = async () => {
-  const session = await getSession<SessionData>(sessionConfig);
-  return session.data;
+  // const session = await getSession<SessionData>(sessionConfig);
+  // return session.data;
+  return { userId: "foo", rootKey: "bar" };
 };
