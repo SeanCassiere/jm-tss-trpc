@@ -4,19 +4,18 @@ import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { trpc } from "../utils/trpc";
 
 export const Route = createFileRoute("/")({
-  loader: async ({ context }) => {
-    await context.trpc.listApps.prefetch({ userId: context.userId });
-  },
+  // loader: async ({ context }) => {
+  //   await context.trpc.listApps.prefetch({ userId: context.userId });
+  // },
   component: Home,
 });
 
 function Home() {
-  const userId = useLoaderData({
-    from: "__root__",
+  const userId = Route.useRouteContext({
     select: (data) => data.userId,
   });
-  const [apps] = trpc.listApps.useSuspenseQuery({ userId });
-  const [newAppModalOpen, setNewAppModalOpen] = React.useState(false);
+  // const [apps] = trpc.listApps.useSuspenseQuery({ userId });
+  // const [newAppModalOpen, setNewAppModalOpen] = React.useState(false);
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col items-center p-16">

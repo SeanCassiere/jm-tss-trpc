@@ -28,7 +28,8 @@ import { createAuthenticatedTRPCClient, trpc } from "../utils/trpc";
 /** Get trpc server url from SSR pass? */
 const getTRPCClientOptions = createServerFn("GET", async () => {
   const session = await getSessionData();
-  const url = `${process.env.API_URL}/trpc`;
+  // const url = `${process.env.API_URL}/trpc`;
+  const url = `http://localhost:3030/trpc`;
   return {
     clientHeaders: {
       "x-root-key": session.rootKey,
@@ -71,11 +72,6 @@ export const Route = createRootRouteWithContext<{
   },
   loader: async ({ context }) => {
     await context.trpc.listApps.prefetch({ userId: context.userId });
-
-    return {
-      userId: context.userId,
-      trpcClientOptions: context.trpcClientOptions,
-    };
   },
   errorComponent: (props) => {
     return (
@@ -97,7 +93,7 @@ function TRPCProvider(
     children: React.ReactNode;
   }>,
 ) {
-  const { clientHeaders, clientUrl } = Route.useLoaderData({
+  const { clientHeaders, clientUrl } = Route.useRouteContext({
     select: (data) => data.trpcClientOptions,
   });
   const trpcClient = createAuthenticatedTRPCClient(clientUrl, clientHeaders);
